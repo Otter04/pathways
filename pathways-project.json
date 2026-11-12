@@ -1,0 +1,10 @@
+{
+  "project": "PATHWAYS",
+  "deploymentSchema": 1,
+  "repository": "Otter04/pathways",
+  "branch": "main",
+  "publishPath": "/docs",
+  "dataPath": "docs/jobs-data.json",
+  "refreshIntervalDays": 3,
+  "clientCheckSeconds": 300
+}
