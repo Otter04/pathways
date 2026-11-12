@@ -84,7 +84,7 @@ test_live.js                  네트워크 모의 응답을 이용하는 단위 
 docs/index.html               온라인 채용 탐색 첫 페이지
 docs/pathways-jobs.html        같은 내용의 페이지
 docs/jobs-data.json            유일한 공고 데이터 정본
-docs/cs-career-roadmap-v2.html 기존 진로 로드맵 (내용 유지)
+docs/cs-career-roadmap-v2.html 분야·세부 분야·직업 탐색 화면
 docs/.nojekyll                 정적 파일 게시 표시
 ```
 
@@ -112,3 +112,22 @@ node test_live.js
 - GitHub CLI 설치·인증: https://cli.github.com/
 
 공개 저장소와 Pages에는 소스 코드와 채용정보 요약이 인터넷에 공개됩니다. 개인정보·비공개 문서·비밀번호를 추가하지 마세요. 기업 또는 채용 플랫폼과 제휴된 서비스가 아닙니다.
+
+## 진로 탐색 화면 개편 — 2026-11-12
+
+진로 탐색은 [기존 로드맵 주소](https://otter04.github.io/pathways/cs-career-roadmap-v2.html)에서 제공합니다. 12개 관심 분야 → 36개 세부 분야 → 64개 직업의 흐름으로 업무와 결과물을 살펴볼 수 있습니다. 관심 문장 필터, 직업·업무 검색, 관심 저장과 최대 3개 직업 비교를 제공합니다. 기존 목표·학습 기록과 직업 링크를 유지합니다. 이번 작업은 탐색 화면 개편이며 직업 자료의 원문 확인일을 갱신하지 않았습니다.
+
+구현 기준은 `plans/CAREER-EXPLORER-SPEC.md`입니다. 생성된 HTML을 직접 고치지 않고 아래 원본을 수정합니다.
+
+- `src/roadmap/data.js`: 기존 12개 분야·64개 직업·학습 경로·출처
+- `src/roadmap/explore-data.js`: 세부 분야와 관심 문장에 따른 탐색 분류
+- `src/roadmap/explorer-ui.js`: 분야·직업·관심 목록 화면
+- `src/roadmap/app.js`: 주소 이동, 저장·비교·학습 기록
+- `src/roadmap/styles.css`, `src/roadmap/shell.html`: 화면 스타일과 HTML 틀
+
+```bash
+python3 build_roadmap.py
+node test_roadmap.js
+```
+
+기존 채용 사이트의 생성 명령은 `python3 build_site.py`이며 공고 정본은 그대로 `docs/jobs-data.json`입니다.

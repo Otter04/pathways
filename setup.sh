@@ -46,7 +46,7 @@ if [[ "$EXISTS" = false ]]; then
   git config user.name "$LOGIN"
   git config user.email "$UID_NUM+$LOGIN@users.noreply.github.com"
   # Stage an explicit allowlist, never git add .
-  git add -- docs src sources README.md setup.sh build_site.py validate_data.js test_live.js pathways-project.json .gitignore
+  git add -- docs src sources README.md setup.sh build_site.py validate_data.js test_live.js build_roadmap.py test_roadmap.js plans pathways-project.json .gitignore
   git commit -m 'Initialize PATHWAYS online data site'
   gh repo create "$REPO" --public --description 'PATHWAYS CS career roadmap and curated job opportunities' --source "$ROOT" --remote origin
   git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push -u origin main
