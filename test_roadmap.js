@@ -1,6 +1,6 @@
 'use strict';
 const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
-const source=['data.js','explore-data.js','app.js','explorer-ui.js'].map(n=>fs.readFileSync('src/roadmap/'+n,'utf8')).join('\n');
+const source=['data.js','explore-data.js','examples-data.js','app.js','explorer-ui.js'].map(n=>fs.readFileSync('src/roadmap/'+n,'utf8')).join('\n');
 function boot(saved={},hash='#/map'){
  const app={innerHTML:'',addEventListener(){},querySelector(){return null},querySelectorAll(){return []}};
  const noop={addEventListener(){},classList:{add(){},remove(){}},textContent:''};
@@ -28,3 +28,25 @@ const legacy=boot({'pathways-cs-roadmap-v1':JSON.stringify(historical.progress)}
 const html=fs.readFileSync('docs/cs-career-roadmap-v2.html','utf8');new vm.Script(html.match(/<script>([\s\S]*?)<\/script>/)[1]);
 const jobs=JSON.parse(fs.readFileSync('docs/jobs-data.json','utf8'));const known=new Set(c.run('ROLES.map(r=>r.id)'));assert.ok(jobs.roles.every(r=>known.has(r.id)));
 console.log('PASS: 12 fields / 64 roles, complete taxonomy, all role screens, original links, existing and legacy records, empty new-user comparison, generated script, job-page role IDs.');
+// Every role has a distinct, complete authored example and a scoped project.
+const exampleIds=c.run('Object.keys(ROLE_EXAMPLES).sort()');
+assert.deepEqual(Array.from(exampleIds),Array.from(c.run('ROLES.map(r=>r.id).sort()')));
+for(const field of ['case','project'])assert.equal(c.run(`new Set(Object.values(ROLE_EXAMPLES).map(x=>x.${field}.title)).size`),64);
+for(const id of exampleIds){
+ const x=c.run(`ROLE_EXAMPLES[${JSON.stringify(id)}]`);
+ for(const key of ['title','situation','team','success'])assert.ok(x.case[key]?.length>5,`${id}: case.${key}`);
+ assert.equal(x.case.steps.length,3,id);
+ for(const s of x.case.steps){assert.ok(s.label&&s.action.length>15&&s.artifact);assert.ok(s.contents.length>=2&&s.contents.every(t=>t.length>5));}
+ for(const key of ['title','goal','inputs','scope','check','extension'])assert.ok(x.project[key]?.length>5,`${id}: project.${key}`);
+ assert.equal(x.project.steps.length,3);assert.ok(x.project.steps.every(t=>t.length>10));assert.ok(x.project.deliverables.length>=2);
+ const b=boot({},'#/job/'+id);assert.ok(b.app.innerHTML.includes(x.case.title));assert.ok(b.app.innerHTML.includes(x.project.title));assert.ok(b.app.innerHTML.includes('가상의 설명용 사례'));assert.ok(b.app.innerHTML.includes('학습용 프로젝트 제안'));
+ assert.equal((b.app.innerHTML.match(/data-action="case-step"/g)||[]).length,3);assert.equal((b.app.innerHTML.match(/class="case-stage"/g)||[]).length,3);
+ assert.ok(!b.app.innerHTML.includes('undefined'));
+}
+const stepTest=boot({},'#/job/backend');stepTest.run("selectCaseStep('backend',2)");assert.equal(stepTest.run('state.caseSteps.backend'),2);stepTest.run("selectCaseStep('backend',9);selectCaseStep('frontend',1)");assert.equal(stepTest.run('state.caseSteps.backend'),2);assert.equal(stepTest.run('state.caseSteps.frontend'),undefined);
+const search=boot();const searchNodes={'field-grid':{hidden:false,querySelectorAll(){return []}},'explorer-search-results':{hidden:true,innerHTML:''},'map-count':{textContent:''}};const baseGet=search.ctx.document.getElementById;search.ctx.document.getElementById=id=>searchNodes[id]||baseGet(id);
+search.run("state.query='그럴듯하지만 근거가 없는 답';filterMap()");assert.ok(searchNodes['explorer-search-results'].innerHTML.includes('data-role-card="ai-pm"'));assert.ok(searchNodes['map-count'].textContent.includes('1개 직업'));
+search.run("state.query='xyz없는직업987';filterMap()");assert.ok(searchNodes['explorer-search-results'].innerHTML.includes('아직 일치하는 직업을 찾지 못했어요'));
+search.run("state.query='';filterMap()");assert.equal(searchNodes['field-grid'].hidden,false);assert.equal(searchNodes['explorer-search-results'].hidden,true);
+const compared=boot({'pathways-careers-v2':JSON.stringify(historical)},'#/compare');assert.ok(compared.app.innerHTML.includes('한 번 주문했는데 주문서가 두 장이라면?'));assert.ok(compared.app.innerHTML.includes('중복에 강한 주문 API'));
+console.log('PASS: 64 unique work cases + 64 scoped projects / 192 complete case stages, fictional labels, case selection bounds, case/project search, empty/reset results, example comparison.');
