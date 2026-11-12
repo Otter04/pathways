@@ -152,7 +152,7 @@ PATHWAYS의 짙은 초록색 브랜드를 유지하고, 밝은 미색 바탕과 
 - [x] 사례 단계 선택, 사례 기반 검색, 상세 바로가기, 관심·비교·학습 기록이 정상 동작한다.
 - [x] 개발·분석·기획·보안·하드웨어·연구 등 서로 다른 직업의 내용이 역할에 맞는지 확인한다.
 - [x] 데스크톱·390px 모바일의 가독성·넘침·키보드 탐색을 확인한다.
-- [ ] 공개 사이트와 최종 산출물이 일치하고, 이 문서에 확인 결과를 남긴다.
+- [x] 공개 사이트와 최종 산출물이 일치하고, 이 문서에 확인 결과를 남긴다.
 
 ### 2차 개편의 구현·검증 기록
 
@@ -176,3 +176,11 @@ PATHWAYS의 짙은 초록색 브랜드를 유지하고, 밝은 미색 바탕과 
 - [BLS: 데이터 사이언티스트](https://www.bls.gov/ooh/math/data-scientists.htm) — 데이터 준비·모델 평가·시각화·판단 전달의 범위 참고.
 - [BLS: 정보보안 분석가](https://www.bls.gov/ooh/computer-and-information-technology/information-security-analysts.htm) — 모니터링·조사·통제·취약점·기록의 범위 참고.
 - [BLS: 컴퓨터 하드웨어 엔지니어](https://www.bls.gov/ooh/architecture-and-engineering/computer-hardware-engineers.htm) — 설계·검증·결과 분석·수정·문서화의 범위 참고.
+
+### 공개 반영 확인
+
+- GitHub Pages가 구현 커밋 `1ce2a21fb06e56a563b1ca3751bd676a74670c6e`를 성공적으로 게시했다.
+- 공개 HTML의 HTTP 응답은 200이며 로컬 생성 파일과 바이트 단위로 일치했다(SHA-256: `1c00464b4b24e4a1282f3c486d6c7cfa0b45fae24ed67dbf3c2875e339f252ef`).
+- 공개 사이트의 데스크톱 화면에서 데이터 분석가의 단계 전환·가상 인원 그래프·학생 프로젝트를 확인하고 화면을 저장했다.
+- 사용자 후속 지시에 따라 추가 모바일 검증은 중단하고, 최종 확인은 데스크톱 공개 화면으로 마무리했다.
+- 주소: https://otter04.github.io/pathways/cs-career-roadmap-v2.html
